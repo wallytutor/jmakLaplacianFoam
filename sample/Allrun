@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# Run from this directory
+cd "${0%/*}" || exit
+
+if [ ! -d "0" ]; then
+    cp -avr initial/ 0/
+fi
+
+if [ ! -d "constant/polyMesh" ]; then
+    gmsh -3 -format msh2 wedge.geo
+    gmshToFoam wedge.msh
+    echo "Manually edit patches before proceeding!"
+    exit
+fi
+
+# Run application
+cementHydrationFoam -case .
